@@ -8,6 +8,8 @@ TagManager:
   - SteeringWheel
   - Gear
   - Wheel
+  - Car
+  - boost
   layers:
   - Default
   - TransparentFX

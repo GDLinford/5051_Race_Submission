@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{B01AC9B0-90D4-4813-B5C2-3F1A158AA03A}</ProjectGuid>
+    <ProjectGuid>{0B032BEE-E570-BF0A-8E82-F0AD4E533E80}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -74,9 +74,13 @@
     <Compile Include="Assets\Scripts\Character\Movement\Character\PlayerCameraController.cs" />
     <Compile Include="Assets\Scripts\Character\Movement\Vehicle\MoveVehicle.cs" />
     <Compile Include="Assets\Scripts\DestroyScripts\DestroyFrontLWheel.cs" />
+    <Compile Include="Assets\Scripts\Items\BoostI.cs" />
+    <Compile Include="Assets\Scripts\Items\ItemHandler.cs" />
+    <Compile Include="Assets\Scripts\Items\Items.cs" />
     <Compile Include="Assets\Scripts\Lap Logic\CarLap.cs" />
     <Compile Include="Assets\Scripts\Lap Logic\LapCheckpoint.cs" />
     <Compile Include="Assets\Scripts\Lap Logic\LapHandle.cs" />
+    <Compile Include="Assets\Scripts\Mechanics\Boost.cs" />
     <Compile Include="Assets\Scripts\Mechanics\CamFollow.cs" />
     <Compile Include="Assets\Scripts\Mechanics\Car Build\BuildFinish.cs" />
     <Compile Include="Assets\Scripts\Mechanics\Car Build\CarComplete.cs" />
@@ -116,34 +120,49 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>C:/Users/georg/Downloads/The Racenator (1)/The Racenator/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>C:/Users/georg/Downloads/The Racenator (1)/The Racenator/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Timeline">
-      <HintPath>C:/Users/georg/Downloads/The Racenator (1)/The Racenator/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>C:/Users/georg/Downloads/The Racenator (1)/The Racenator/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:/Users/georg/Downloads/The Racenator (1)/The Racenator/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Analytics.DataPrivacy">
-      <HintPath>C:/Users/georg/Downloads/The Racenator (1)/The Racenator/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ProBuilder">
-      <HintPath>C:/Users/georg/Downloads/The Racenator (1)/The Racenator/Library/ScriptAssemblies/Unity.ProBuilder.dll</HintPath>
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/ScriptAssemblies/Unity.ProBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Editor">
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ProBuilder.Editor">
-      <HintPath>C:/Users/georg/Downloads/The Racenator (1)/The Racenator/Library/ScriptAssemblies/Unity.ProBuilder.Editor.dll</HintPath>
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/ScriptAssemblies/Unity.ProBuilder.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ProBuilder.AssetIdRemapUtility">
-      <HintPath>C:/Users/georg/Downloads/The Racenator (1)/The Racenator/Library/ScriptAssemblies/Unity.ProBuilder.AssetIdRemapUtility.dll</HintPath>
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/ScriptAssemblies/Unity.ProBuilder.AssetIdRemapUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Runtime">
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro.Editor">
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Timeline">
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.CollabProxy.Editor">
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/ScriptAssemblies/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ProBuilder.AddOns.Editor">
-      <HintPath>C:/Users/georg/Downloads/The Racenator (1)/The Racenator/Library/ScriptAssemblies/Unity.ProBuilder.AddOns.Editor.dll</HintPath>
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/ScriptAssemblies/Unity.ProBuilder.AddOns.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ShaderGraph.Editor">
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/ScriptAssemblies/Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Analytics.DataPrivacy">
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.1.9f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -329,13 +348,13 @@
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.1.9f1/Editor/Data/UnityExtensions/Unity/TestRunner/net35/unity-custom/nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Editor">
-      <HintPath>C:/Users/georg/Downloads/The Racenator (1)/The Racenator/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Editor.dll</HintPath>
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.StandardEvents">
-      <HintPath>C:/Users/georg/Downloads/The Racenator (1)/The Racenator/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.StandardEvents.dll</HintPath>
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
-      <HintPath>C:/Users/georg/Downloads/The Racenator (1)/The Racenator/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Tracker.dll</HintPath>
+      <HintPath>C:/Users/georg/OneDrive/Documents/GitHub/5051_Race_Submission/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.1.9f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
