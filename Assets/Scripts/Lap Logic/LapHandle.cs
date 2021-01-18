@@ -9,6 +9,7 @@ public class LapHandle : MonoBehaviour
     public Text Score;
     public int CheckpointAmount;
 
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<CarLap>())

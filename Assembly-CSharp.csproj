@@ -75,11 +75,15 @@
     <Compile Include="Assets\Scripts\Character\Movement\Vehicle\MoveVehicle.cs" />
     <Compile Include="Assets\Scripts\DestroyScripts\DestroyFrontLWheel.cs" />
     <Compile Include="Assets\Scripts\Items\BoostI.cs" />
+    <Compile Include="Assets\Scripts\Items\ItemBlock.cs" />
     <Compile Include="Assets\Scripts\Items\ItemHandler.cs" />
     <Compile Include="Assets\Scripts\Items\Items.cs" />
+    <Compile Include="Assets\Scripts\Items\Itemuse.cs" />
+    <Compile Include="Assets\Scripts\Items\NonIBoxPixkups.cs" />
     <Compile Include="Assets\Scripts\Lap Logic\CarLap.cs" />
     <Compile Include="Assets\Scripts\Lap Logic\LapCheckpoint.cs" />
     <Compile Include="Assets\Scripts\Lap Logic\LapHandle.cs" />
+    <Compile Include="Assets\Scripts\Lap Logic\Timer.cs" />
     <Compile Include="Assets\Scripts\Mechanics\Boost.cs" />
     <Compile Include="Assets\Scripts\Mechanics\CamFollow.cs" />
     <Compile Include="Assets\Scripts\Mechanics\Car Build\BuildFinish.cs" />

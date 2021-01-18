@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
     public KeyCode Right;
     public KeyCode Left;
+
+    [HideInInspector]
+    public int Gears;
+
+    public int FuelA;
+
+    [HideInInspector]
+    public float cooldown = 3;
 
     //private WheelHit FrontLWheelHit;
 
@@ -18,8 +23,9 @@ public class Controller : MonoBehaviour
     private float Angle;
     private float currentBreakForce;
     private bool breaking;
+    public float carSpeed;
 
-    [SerializeField] private float motorForce;
+    [SerializeField] private float motorForce = 5f;
     [SerializeField] private float breakForce;
     [SerializeField] private float maxSteeringAngle;
 
@@ -29,9 +35,9 @@ public class Controller : MonoBehaviour
     //[HideInInspector] public int RearRWheelHP;
 
     public int WheelsHP;
+    [HideInInspector]
+    public int wheelsCurHp;
     public float mass = -0.9f;
-
-    
 
     [SerializeField] private WheelCollider frontLeft;
     [SerializeField] private WheelCollider frontRight;
@@ -59,51 +65,52 @@ public class Controller : MonoBehaviour
         {
             WheelsHP = Mathf.Clamp(WheelsHP, 1, 10);
 
-            WheelsHP--;
-            Debug.Log("Wheels HP: " + WheelsHP);
+            wheelsCurHp = WheelsHP - 1;
 
-            if (WheelsHP == 8)
+            Debug.Log("Wheels HP: " + wheelsCurHp);
+
+            if (wheelsCurHp == 8)
             {
                 Physics.IgnoreCollision(RearLeft, GetComponent<Collider>(), true);
                 RearLeft.gameObject.SetActive(false);
             }
 
-            if (WheelsHP == 6)
+            if (wheelsCurHp == 6)
             {
                 Physics.IgnoreCollision(RearRight, GetComponent<Collider>(), true);
                 RearRight.gameObject.SetActive(false);
             }
 
-            if (WheelsHP == 4)
+            if (wheelsCurHp == 4)
             {
                 Physics.IgnoreCollision(frontLeft, GetComponent<Collider>(), true);
                 frontLeft.gameObject.SetActive(false);
             }
 
-            if (WheelsHP == 2)
+            if (wheelsCurHp == 2)
             {
                 Physics.IgnoreCollision(frontRight, GetComponent<Collider>(), true);
                 frontRight.gameObject.SetActive(false);
             }
 
-            if (WheelsHP > 4)
+            if (wheelsCurHp > 4)
             {
                 RearLeft.gameObject.SetActive(true);
             }
 
-            if (WheelsHP > 6)
+            if (wheelsCurHp > 6)
             {
                 frontRight.gameObject.SetActive(true);
             }
 
-            if (WheelsHP > 8)
+            if (wheelsCurHp > 8)
             {
                 frontLeft.gameObject.SetActive(true);
             }
 
-            else if (WheelsHP == 0 && Input.GetKeyDown(KeyCode.Q))
+            else if (wheelsCurHp == 0 && Input.GetKeyDown(KeyCode.Q))
             {
-                WheelsHP += 10;
+                wheelsCurHp += 10;
 
                 RearLeft.gameObject.SetActive(true);
                 RearRight.gameObject.SetActive(true);
@@ -139,7 +146,7 @@ public class Controller : MonoBehaviour
     {
         horizontalInput = Input.GetAxis(HORIZONTAL);
         verticalInput = Input.GetAxis(VERTICAL);
-        breaking = Input.GetKey(KeyCode.Space);
+        breaking = Input.GetKeyDown(KeyCode.Space);
     }
 
     private void Motor()
@@ -148,10 +155,15 @@ public class Controller : MonoBehaviour
         frontRight.motorTorque = verticalInput * motorForce;
         RearLeft.motorTorque = verticalInput * motorForce;
         RearRight.motorTorque = verticalInput * motorForce;
-        currentBreakForce = breaking ? breakForce : 0f;
+        currentBreakForce = breaking ? breakForce : 3f;
         if (breaking)
         {
             BeginBreaking();
+        }
+
+        else if (Input.GetKeyUp(KeyCode.Space))
+        {
+            ResetWheels();
         }
     }
 
@@ -181,10 +193,54 @@ public class Controller : MonoBehaviour
 
     private void BeginBreaking()
     {
-        frontLeft.brakeTorque = currentBreakForce;
-        frontRight.brakeTorque = currentBreakForce;
         RearLeft.brakeTorque = currentBreakForce;
         RearRight.brakeTorque = currentBreakForce;
+    }
+
+    private void ResetWheels()
+    {
+        frontLeft.brakeTorque = 0f;
+        frontRight.brakeTorque = 0f;
+        RearLeft.brakeTorque = 0f;
+        RearRight.brakeTorque = 0f;
+    }
+
+    public void carBoost(float BoostAmount)
+    {
+        cooldown = Time.deltaTime;
+
+        if (BoostAmount == 0)
+        {
+            return;
+        }
+
+        else if (cooldown <= 0)
+        {
+            motorForce = 4000f;
+        }
+    }
+
+    public void AddFuel (int amount)
+    {
+        FuelA += amount;
+
+        if (amount == 10)
+        {
+            carBoost(8000f);
+        }
+    }
+
+    public bool AddGear(int Amount)
+    {
+        if (wheelsCurHp + Amount <= WheelsHP)
+        {
+            WheelsHP += Amount;
+            Debug.Log("WheelsHp" + WheelsHP);
+
+            return true;
+        }
+
+        return false;
     }
 
 
