@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: ff51c105368f99a4f92949d633fed7b9
+  - enabled: 1
+    path: Assets/Scenes/Choose Character.unity
+    guid: 15e5272acd5cbeb41bf6a0c4d6612cc1
+  - enabled: 1
+    path: Assets/Scenes/Choose Car.unity
+    guid: dac2837a26976bc43988581bbc013a37
+  - enabled: 1
+    path: Assets/Scenes/Build Car.unity
+    guid: 9429a3e74079328438b6dfcf93659fa6
+  - enabled: 1
+    path: Assets/Scenes/Driving.unity
+    guid: 51333e0ca511c9b41997c9dca8c3a547
+  m_configObjects: {}
