@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CarDamage : MonoBehaviour
+public class CarDamage : Controller
 {
     private int carHP;
 

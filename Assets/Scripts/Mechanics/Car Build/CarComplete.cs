@@ -14,6 +14,8 @@ public class CarComplete : MonoBehaviour
 
 	public GameObject carSteeringWheel;
 
+	public StateChanger stateChange;
+
 	public bool carInRange;
 
 	public bool carComplete;
@@ -35,12 +37,14 @@ public class CarComplete : MonoBehaviour
 	public bool wheelFitted;
 
 	public void Update() {
-		ChangeScene();
+		//ChangeScene();
 		if (engineFitted && gearFitted && steeringWheelFitted && wheelFitted) {
-			carComplete = true;
-			Debug.Log("We dun built a car son");
+			//carComplete = true;
+			//Debug.Log("We dun built a car son");
+			stateChange.Changer();
 		}
 	}
+
 	private void Start() {
 		carComplete = false;
 		hasEngine = false;
@@ -55,15 +59,17 @@ public class CarComplete : MonoBehaviour
 	}
 
 	public void LoadNextScene() {
-		SceneManager.LoadScene(SceneManager.sceneCount + 1);
-		Debug.Log("Scene Loaded");
+		//SceneManager.LoadScene(SceneManager.sceneCount + 3);
+		//Debug.Log("Scene Loaded");
 	}
 
-	public void ChangeScene() {
-		if (carComplete) {
-			LoadNextScene();
-		}
-	}
+
+	//Can be used for a final car build to change scene
+	//public void ChangeScene() {
+	//	if (carComplete) {		
+	//		LoadNextScene();
+	//	}
+	//}
 
 	private void OnTriggerEnter(Collider other) {
 		carInRange = true;

@@ -5,5 +5,5 @@ using UnityEngine;
 [System.Serializable]
 public class ItemBoost 
 {
-    public float Boost;
+	public int Boost;
 }

@@ -69,7 +69,7 @@ public class Itemuse : MonoBehaviour
         {
             foreach (ItemBoost Iboosts in ItemToUse.boosts)
             {
-                car.carBoost(Iboosts.Boost);
+                car.ItemBoost(Iboosts.Boost);
             }
         }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LapCheckpoint : MonoBehaviour
 {
@@ -18,13 +19,13 @@ public class LapCheckpoint : MonoBehaviour
 
             if (car.CheckpointNumber == Number + 1 || car.CheckpointNumber == Number - 1)
             {
-                car.CheckpointNumber = Number;
+				
+				car.CheckpointNumber = Number;
                 controller.WheelsHP += 1;
-                Debug.Log("CarHpLApCheckpoint: " + controller.WheelsHP);
+                Debug.Log("CarHpLapCheckpoint: " + controller.WheelsHP);
                 car.score += 100;
             }
             checkPoint.text = "Checkpoint: " + Number;
         }
     }
-
 }

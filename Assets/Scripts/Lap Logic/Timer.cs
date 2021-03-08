@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    public Text timer;
+    //public Text timer;
     private float sTime;
     // Start is called before the first frame update
     void Start()
@@ -22,6 +22,6 @@ public class Timer : MonoBehaviour
         string minutes = ((int)t / 60).ToString();
         string seconds = (t % 60).ToString("f2");
 
-        timer.text = minutes + ":" + seconds;
+        //timer.text = minutes + ":" + seconds;
     }
 }

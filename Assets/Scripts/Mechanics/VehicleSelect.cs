@@ -46,7 +46,7 @@ public class VehicleSelect : MonoBehaviour
 	}
 
 	public void ConfirmButton() {
-		SceneManager.LoadScene(SceneManager.sceneCount + 0);
+		SceneManager.LoadScene(SceneManager.sceneCount + 1);
 		SceneManager.LoadScene(3);
 	}
 }

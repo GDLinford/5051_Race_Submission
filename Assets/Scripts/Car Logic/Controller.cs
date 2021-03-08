@@ -1,58 +1,79 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
-public class Controller : MonoBehaviour
+public class Controller : Stats
 {
-    public KeyCode Right;
-    public KeyCode Left;
+	// For switching between car and character
+	public StateChanger stateChange;
 
+    [Header("Inputs")]
+	public KeyCode FlipRight;
+    public KeyCode FlipLeft;
+    public KeyCode BoostPower;
+    public KeyCode Accelerate;
+    public KeyCode Decelerate;
+
+    public bool breaking;
+
+    [Header("Boost")]
+    //Boost Logic
+    public bool boosting;
     [HideInInspector]
-    public int Gears;
+    public bool canBoost = true;
+    [SerializeField]
+    private float TotalBoost = 10f;
+    public float MaxBoost { get { return TotalBoost; } set { TotalBoost = value; } }
+
+    //amount of boost we currently have left
+    [SerializeField]
+    private float boostLeft;
+    public float Boost { get { return boostLeft; } set { boostLeft = Mathf.Clamp(value, 0f, TotalBoost); } }
+
+    //force thats going to be applied to the car itself
+    [SerializeField]
+    private float boostForce;
+    public float BoostForce { get { return boostForce; } set { boostForce = value; } }
+
+    private Rigidbody rgBody;
 
     public int FuelA;
+    public Text FuelText;
 
     [HideInInspector]
     public float cooldown = 3;
-
-    //private WheelHit FrontLWheelHit;
 
     private const string HORIZONTAL = "P2 Horizontal";
     private const string VERTICAL = "P2 Vertical";
 
     private float horizontalInput;
     private float verticalInput;
-    private float Angle;
-    private float currentBreakForce;
-    private bool breaking;
-    public float carSpeed;
 
-    [SerializeField] private float motorForce = 5f;
-    [SerializeField] private float breakForce;
-    [SerializeField] private float maxSteeringAngle;
+    public double carSpeed;
 
-    //[HideInInspector] public int frontLWheelHP;
-    //[HideInInspector] public int frontRWheelHP;
-    //[HideInInspector] public int RearLWheelHP;
-    //[HideInInspector] public int RearRWheelHP;
+    [Header("Wheels")]
+    //Wheel colliders
+    public WheelCollider frontLeft;
+    public WheelCollider frontRight;
+    public WheelCollider RearLeft;
+    public WheelCollider RearRight;
 
-    public int WheelsHP;
-    [HideInInspector]
-    public int wheelsCurHp;
-    public float mass = -0.9f;
+    //The transforms for the wheels
+    public Transform frontLeftT;
+    public Transform frontRightT;
+    public Transform RearLeftT;
+    public Transform RearRightT;
 
-    [SerializeField] private WheelCollider frontLeft;
-    [SerializeField] private WheelCollider frontRight;
-    [SerializeField] private WheelCollider RearLeft;
-    [SerializeField] private WheelCollider RearRight;
-
-    [SerializeField] private Transform frontLeftT;
-    [SerializeField] private Transform frontRightT;
-    [SerializeField] private Transform RearLeftT;
-    [SerializeField] private Transform RearRightT;
-
-    private void Start()
+    void Start()
     {
+        rgBody = GetComponent<Rigidbody>();
+        //Calculates car speed
+        motorForce = (float)(rgBody.velocity.magnitude * 2.237);
+        maxSteeringAngle = 45f;
         WheelsHP = 10;
+        mass = -0.9f;
         GetComponent<Rigidbody>().centerOfMass = new Vector3(0f, mass, 0f);
+        FuelA = Mathf.Clamp(FuelA, 0, 5);
+        boostLeft = TotalBoost;
     }
 
     private void OnCollisionEnter(Collision collider)
@@ -61,56 +82,54 @@ public class Controller : MonoBehaviour
 
         Debug.Log("Collide");
 
-        if (collisionForce > 1000.0f)
+        if (collisionForce > 50f)
         {
-            WheelsHP = Mathf.Clamp(WheelsHP, 1, 10);
+            WheelsHP = WheelsHP - 1;
 
-            wheelsCurHp = WheelsHP - 1;
+            Debug.Log("Wheels HP: " + WheelsHP);
 
-            Debug.Log("Wheels HP: " + wheelsCurHp);
-
-            if (wheelsCurHp == 8)
+            if (WheelsHP == 8)
             {
                 Physics.IgnoreCollision(RearLeft, GetComponent<Collider>(), true);
                 RearLeft.gameObject.SetActive(false);
             }
 
-            if (wheelsCurHp == 6)
+            if (WheelsHP == 6)
             {
                 Physics.IgnoreCollision(RearRight, GetComponent<Collider>(), true);
                 RearRight.gameObject.SetActive(false);
             }
 
-            if (wheelsCurHp == 4)
+            if (WheelsHP == 4)
             {
                 Physics.IgnoreCollision(frontLeft, GetComponent<Collider>(), true);
                 frontLeft.gameObject.SetActive(false);
             }
 
-            if (wheelsCurHp == 2)
+            if (WheelsHP == 2)
             {
                 Physics.IgnoreCollision(frontRight, GetComponent<Collider>(), true);
                 frontRight.gameObject.SetActive(false);
             }
 
-            if (wheelsCurHp > 4)
+            if (WheelsHP > 4)
             {
                 RearLeft.gameObject.SetActive(true);
             }
 
-            if (wheelsCurHp > 6)
+            if (WheelsHP > 6)
             {
                 frontRight.gameObject.SetActive(true);
             }
 
-            if (wheelsCurHp > 8)
+            if (WheelsHP > 8)
             {
                 frontLeft.gameObject.SetActive(true);
             }
 
-            else if (wheelsCurHp == 0 && Input.GetKeyDown(KeyCode.Q))
+            else if (WheelsHP == 0 && Input.GetKeyDown(KeyCode.Q))
             {
-                wheelsCurHp += 10;
+                WheelsHP += 10;
 
                 RearLeft.gameObject.SetActive(true);
                 RearRight.gameObject.SetActive(true);
@@ -124,47 +143,86 @@ public class Controller : MonoBehaviour
 
     }
 
-    private void Update()
+	private void Update() {
+
+        if (canBoost)
+        {
+            boostLeft += Time.deltaTime;
+            if (boostLeft > TotalBoost)
+            {
+                boostLeft = TotalBoost;
+            }
+        }
+        //if the cars going too fast decelerate, unless the car is boosting
+        if (motorForce >= 5000f && !boosting)
+        {
+            frontLeft.motorTorque = verticalInput - motorForce;
+            frontRight.motorTorque = verticalInput - motorForce;
+            RearLeft.motorTorque = verticalInput - motorForce;
+            RearRight.motorTorque = verticalInput - motorForce;
+        }
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            frontLeft.brakeTorque = brakeForce;
+            frontRight.brakeTorque = brakeForce;
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            frontLeft.brakeTorque = 0;
+            frontRight.brakeTorque = 0;
+        }
+    } 
+
+	private void FixedUpdate()
     {
-        //GetComponent<Transform>().eulerAngles = new Vector3(0, 90, 0);
         GetInput();
-        Motor();
+        Forward();
         Steer();
         WheelVisuals();
-    }
-
-    private void FixedUpdate()
-    {
-        if (Input.GetKeyDown(Right))
+        if (Input.GetKey(FlipRight))
             transform.Rotate(0, 0, 30);
 
-        if (Input.GetKeyDown(Left))
+        if (Input.GetKey(FlipLeft))
             GetComponent<Transform>().eulerAngles = new Vector3(0, 0, 0);
-    }
 
+        boosting = Input.GetKey(BoostPower);
+
+        if (boosting && canBoost && boostLeft > 0.1f)
+        {
+            rgBody.AddForce(transform.forward * boostForce);
+
+            boostLeft -= Time.fixedDeltaTime;
+            if (boostLeft <= 9f && boostLeft >= 8f)
+            {
+                boostLeft = 9f;
+            }
+        }
+    }
     private void GetInput()
     {
         horizontalInput = Input.GetAxis(HORIZONTAL);
         verticalInput = Input.GetAxis(VERTICAL);
-        breaking = Input.GetKeyDown(KeyCode.Space);
     }
 
-    private void Motor()
+    private void Forward()
     {
-        frontLeft.motorTorque = verticalInput * motorForce;
-        frontRight.motorTorque = verticalInput * motorForce;
-        RearLeft.motorTorque = verticalInput * motorForce;
-        RearRight.motorTorque = verticalInput * motorForce;
-        currentBreakForce = breaking ? breakForce : 3f;
-        if (breaking)
+        if (Input.GetKey((KeyCode.W)))
         {
-            BeginBreaking();
+            motorForce++;
+        }
+        else 
+        {
+
         }
 
-        else if (Input.GetKeyUp(KeyCode.Space))
+        if (motorForce <= 0)
         {
-            ResetWheels();
+            motorForce = 0;
         }
+        frontLeft.motorTorque = verticalInput * motorForce;
+        frontRight.motorTorque = verticalInput * motorForce;
+
     }
 
     private void Steer()
@@ -191,57 +249,33 @@ public class Controller : MonoBehaviour
         WTransform.position = pos;
     }
 
-    private void BeginBreaking()
-    {
-        RearLeft.brakeTorque = currentBreakForce;
-        RearRight.brakeTorque = currentBreakForce;
-    }
+    //private void BeginBreaking()
+    //{
+    //    RearLeft.brakeTorque = currentBreakForce;
+    //    RearRight.brakeTorque = currentBreakForce;
+    //    frontLeft.brakeTorque = currentBreakForce;
+    //    frontRight.brakeTorque = currentBreakForce;
+    //}
 
-    private void ResetWheels()
-    {
-        frontLeft.brakeTorque = 0f;
-        frontRight.brakeTorque = 0f;
-        RearLeft.brakeTorque = 0f;
-        RearRight.brakeTorque = 0f;
-    }
+    //private void ResetWheels()
+    //{
+    //    frontLeft.brakeTorque = 0f;
+    //    frontRight.brakeTorque = 0f;
+    //    RearLeft.brakeTorque = 0f;
+    //    RearRight.brakeTorque = 0f;
+    //}
 
-    public void carBoost(float BoostAmount)
+    public void ItemBoost(float boostAmount)
     {
-        cooldown = Time.deltaTime;
-
-        if (BoostAmount == 0)
+        if (boostAmount == 0)
         {
             return;
-        }
-
-        else if (cooldown <= 0)
-        {
-            motorForce = 4000f;
         }
     }
 
     public void AddFuel (int amount)
     {
         FuelA += amount;
-
-        if (amount == 10)
-        {
-            carBoost(8000f);
-        }
+        FuelText.text = "Fuel Amount " + FuelA;
     }
-
-    public bool AddGear(int Amount)
-    {
-        if (wheelsCurHp + Amount <= WheelsHP)
-        {
-            WheelsHP += Amount;
-            Debug.Log("WheelsHp" + WheelsHP);
-
-            return true;
-        }
-
-        return false;
-    }
-
-
 }

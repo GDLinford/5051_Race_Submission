@@ -5,11 +5,8 @@ using UnityEngine;
 
 public enum NonIPickups 
 {
-    Gear,
     Fuel
 }
-
-
 
 public class NonIBoxPixkups : MonoBehaviour
 {
@@ -20,14 +17,10 @@ public class NonIBoxPixkups : MonoBehaviour
     {
         if (other.CompareTag("Car"))
         {
-            if (iPickups == NonIPickups.Gear)
-            {
-                other.GetComponent<Controller>().AddGear(value);
-            }
-
             if (iPickups == NonIPickups.Fuel)
             {
                 other.GetComponent<Controller>().AddFuel(value);
+                Destroy(this.gameObject);
             }
         }
     }

@@ -10,6 +10,7 @@ TagManager:
   - Wheel
   - Car
   - boost
+  - Boulder
   layers:
   - Default
   - TransparentFX
